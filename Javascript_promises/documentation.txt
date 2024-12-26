@@ -1,7 +1,7 @@
 			#synchronous code with a blocking operation
 function runloop(){
 	for(let i=0; i<1e10; i++){
-	console.log('loop finished');
+	console.log('loop finished');}
 }
 console.log('First statement');
 runloop();

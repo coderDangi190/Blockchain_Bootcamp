@@ -1,0 +1,49 @@
+Ethers
+Instillization,
+	npm init -y
+	npm install ethers
+	
+SmartContract
+	//SPDX-License-Identifier:MIT
+	pragma solidity ^0.8.28;
+		contract Transaction{
+			uint256  number;	//State variable
+			
+			function store(uint256 _num) public {
+				number = _num;
+			}
+			function output() public view returns(uint256){
+				return number;
+			}
+		}
+
+# Read the value of SmartContract  through etherjs  in scReadcontract.js
+	const ether = require("ethers");
+	const abi = require("./abi");
+	
+	await function ReadSmartContract(){
+		const Provider = new ethers.JsonRpcProvider("https://ethereum.publicnode.com");
+		const contractAddress = " .............................";
+		const contractInstance = new ethers.Contract(contractAddress, abi, Provider);
+		const value = await contractInstance.output();
+
+		console.log(value);
+	}
+	ReadSmartContract()
+note:-  node scReadcontract 
+
+#Store the value of SmartContract through ether.js in scWritecontract.js
+	const ether = require("ethers");
+	const abi = require("./abi");
+	const { Wallet} = require("ethers")
+
+	await function WriteSmartContract(){
+		const Provider = new ethers.JsonRpcProvider("https://ethereum.publicnode.com");
+		const contractAddress = ".................";
+		const privatekey = env.process.PRIVATE_KEY;
+		const wallet = new ethers.Wallet(privatekey, Provider);
+		const contractInstance = new ethers.Contract(contractAddress, abi, wallet);
+		await contractInstance.store(100);
+		console.log("Transaction SuccessFull");
+	}
+	
