@@ -1,0 +1,89 @@
+		#initialing Process
+create a Folder
+Select your Path and Put there :-
+	npm init
+	npm install express
+then 
+	Verify the	Instillation 
+In Package.json
+	"dependencies" :{
+	     "express": "^4.17.1"
+	}
+	
+	#install nodemon
+npm nodemon index.js
+ if nodemon not install globally then you install used this command
+	npm install -g nodemon
+	nodemon index.js
+
+
+run the code :- node index.js
+
+	#starting Program
+
+const express = require("express");
+const app = express();
+app.get('/', (req,res)=>{
+	res.send("Hello World");
+});
+app.listen(3000, ()=>{
+	console.log('Server is running on port 3000');
+}
+		#Next program
+
+
+const express = require("express");
+const app = express();
+
+const PORT = 3000;
+
+app.get("/user", (req, res)=>{
+  const {userName} = req.query;
+   res.send (`His name is ${userName}`);
+});
+app.listen(PORT, ()=>{
+   console.log('Server is running on Port ${PORT}');
+}); 
+
+
+
+Run server:- http://localhost:3000/user?userName=sandip;
+
+
+				#Start
+npm init
+npm install express --save 
+touch index.js
+		const express = require('express');
+		const path = require('path');
+		const app = express();
+		const PORT = 3000;
+		
+		//to create a middleware
+		const sandipmiddleware = (req, res, next)=>{
+			console.log(res);
+			next;
+			}
+		app.use(sandipmiddleware);
+		app.get('\', (req, res)=>{
+
+			res.send("Hello sandip.");
+		})
+		// to access file from folder
+		app.use(express.static(path.join(__dirname, "Demo")));
+		app.get('\home', (req, res)={
+		
+			res.sendFile(path.join(__dirname, "index.html"));
+		})
+		
+		app.get('/user/:userName', (req, res)=>{
+			res.send('Hello  ' + req.params.userName)
+		});
+
+		app.listen(PORT, ()=>{
+
+			console.log(`Server is running  PORT :${PORT}`;
+		})
+
+
+
