@@ -82,7 +82,7 @@ touch index.js
 
 		app.listen(PORT, ()=>{
 
-			console.log(`Server is running  PORT :${PORT}`;
+			console.log(`Server is running  PORT :${PORT}`);
 		})
 
 
