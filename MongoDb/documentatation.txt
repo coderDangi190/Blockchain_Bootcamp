@@ -1,0 +1,64 @@
+npm init --y
+
+npm install express cors mongoose mongodb nodemon dotenv
+
+const express = require("express");
+const app = express();
+require("dotenv").config();
+const connectDB = require("./db/connect");
+app.use(express.json());
+
+connectDB(process.env.MONGO_URL);
+async function dbms() {
+  try {
+    console.log("Database is connected.");
+    app.listen(3000, () => {
+      console.log("Server is running");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+dbms();
+
+# CandidateSchema
+
+const mongoose = require("mongoose");
+
+const CandidateSchema = new mongoose.Schema({
+    walletAddress:{
+        type:String,
+        require:true,
+    },
+    profilePick:{
+        type:String,
+        require:true,
+    },
+})
+
+const CandidateModel = mongoose.model("CandidateDetail", CandidateSchema);
+module.exports = CandidateModel;
+
+
+#routes
+
+const express = require("express");
+const router = express.Router();
+
+const CandidateModel = require("../models/CandidateSchema");
+
+router.post("/postCandidateimg", async(req, res)=>{
+    try{
+        const {walletAddress, profilePick} = req.body;
+        const saveCandidate = await CandidateModel.create({
+            walletAddress:walletAddress,
+            profilePick:profilePick,
+        });
+    }
+    catch(error){
+        console.log(error);
+    }
+})
+
+module.exports = router;
