@@ -1,0 +1,123 @@
+#VottingDapp
+
+ npm create vite@latest  .
+
+React
+Javascript
+
+npm install 
+npm run dev
+
+npm install ethers 
+	-context	-constant	-utils
+#CONSTANT
+-abi.json
+
+#CONTEXT
+	web3Context.jsx
+import {createContext} from "react"
+
+export const Web3Context = createContext();
+
+	Web3Provider.jsx
+
+import {useState, useEffect} from "react"
+import {Web3Context}  from "./web3Context";
+
+
+const Web3Provider = ({children})=>{
+	const [Web3State, setWeb3State] = useState({
+		contractInstance:null,
+		selectedAccount:null,
+		chainId:null
+	})
+	return(
+		<>
+			<Web3Context.Provider  value={Web3State}>
+				{children}
+			<Web3Context.Provider>
+		</>
+	)
+}
+export default Web3Provider;
+	
+	App.jsx
+import Web3Provider from "./context/Web3Provider";
+import Dummy from "./Dummy"
+function APP(){
+	return(
+		<>
+			<Web3Provider>
+				<Dummy>
+			</Web3Provider>
+		</>
+	)
+}
+
+
+	Dummy.jsx
+import {useContext} from "react";
+import {Web3Context}  from "./context/web3Context";
+
+const Dummy=()=>{
+	const{contractInstance,selectedAccount,chainId} = useContext(Web3State);
+	console.log(contractInstance,selectedAccount,chainId);
+	return(
+		<>
+			<h1>Dummy Component</>
+		</>
+	)
+	
+}
+export default Dummy;
+
+
+#UTILS
+	getWeb3State.jsx
+import {ethers} from "ethers";
+import abi from "../constant/abi.json";
+export const getWeb3State = async() => {
+  try {
+    //metamask instillation check
+    if (!window.ethereum) {
+      throw new Error("MetaMask is not install.");
+    }
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    const selectedAccount = accounts[0];
+
+    const chainIdHex = await window.ethereum.request({
+      method: "eth_chainId",
+    });
+    const chainId = parseInt(chainIdHex,16);
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contractAddress ="0xCCC15B5CCAF92d34f3A99c2270920D3Fcf42c290";
+
+    const contractInstance = new ethers.Contract(contractAddress,abi,signer)
+    return {contractInstance,selectedAccount,chainId}
+
+  } catch (error) {
+    console.error(error);
+    throw new Error
+  }
+};
+
+	handleAccountChange.jsx
+
+export const handleAccountChange = async(setWeb3State)=>{
+    const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+    });
+    const selectedAccount = accounts[0];
+    setWeb3State((preState)=>({...preState, selectedAccount}));
+}
+	handleChainChange.jsx
+	export const handleChainChange = async(setWeb3State)=>{
+    const chainIdHex = await window.ethereum.request({
+        method: "eth_chainId",
+    });
+    const chainId = parseInt(chainIdHex, 16);
+    setWeb3State((preState)=>({...preState, chainId}));
+}
